@@ -8,6 +8,8 @@
   flex-direction: column;
   overflow: hidden;
   position: relative;
+  transition: transform 0.28s ease;
+  flex-shrink: 0;
 }
 
 /* Head */
@@ -34,6 +36,15 @@
   transition: background .18s;
 }
 .sb-new:hover { background: var(--accent); color: #fff; }
+
+/* Mobile close button — hidden on desktop */
+.sb-close-mobile {
+  display: none;
+  width: 28px; height: 28px;
+  align-items: center; justify-content: center;
+  background: var(--bg-3); border: 1px solid var(--border-light);
+  border-radius: 7px; color: var(--text-2);
+}
 
 /* Search */
 .sb-search {
@@ -63,9 +74,10 @@
 
 .sb-row {
   display: flex; align-items: center; gap: 8px;
-  width:100%; padding: 7px 9px;
+  width:100%; padding: 9px 9px;
   border-radius: 8px; text-align:left;
   transition: background .15s;
+  min-height: 44px; /* better touch target on mobile */
 }
 .sb-row:hover { background: var(--bg-hover); }
 .sb-row.active { background: var(--accent-soft); border: 1px solid var(--accent-glow); }
@@ -113,3 +125,25 @@
 }
 .ctx-menu button:hover { background:var(--bg-hover); color:var(--text-1); }
 .ctx-menu button.ctx-del:hover { background:rgba(248,113,113,.09); color:var(--red); }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    z-index: 50;
+    transform: translateX(-100%);
+    width: 280px;
+    min-width: 280px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sb-close-mobile {
+    display: flex; /* show X button on mobile */
+  }
+}

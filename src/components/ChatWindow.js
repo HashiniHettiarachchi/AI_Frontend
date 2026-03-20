@@ -3,7 +3,7 @@ import { useChat } from '../context/ChatContext';
 import { sendMessage, getModel } from '../services/aiService';
 import ModelSelector from './ModelSelector';
 import MessageBubble from './MessageBubble';
-import { Send, Sparkles, AlertCircle } from 'lucide-react';
+import { Send, Sparkles, AlertCircle, Menu } from 'lucide-react';
 import './ChatWindow.css';
 
 const SUGGESTIONS = [
@@ -53,7 +53,7 @@ function SwitchBanner({ fromModel, toModel, onStay, onSwitch }) {
         </span>
       </div>
       <div className="cw-switch-btns">
-        <button className="csb-stay"   onClick={onStay}>Stay with {fromModel.name}</button>
+        <button className="csb-stay" onClick={onStay}>Stay</button>
         <button className="csb-switch" onClick={onSwitch} style={{borderColor: toModel.color, color: toModel.color}}>
           New {toModel.name} chat
         </button>
@@ -62,83 +62,58 @@ function SwitchBanner({ fromModel, toModel, onStay, onSwitch }) {
   );
 }
 
-export default function ChatWindow() {
+export default function ChatWindow({ onMenuClick }) {
   const {
     activeId, activeChat, modelId,
     newChat, addMsg, setTitle, setModelId,
     loading, setLoading,
   } = useChat();
 
-  const [input, setInput]         = useState('');
-  const [busy, setBusy]           = useState(false);
-  // pendingModel = model user wants to switch to, waiting for confirmation
+  const [input, setInput]          = useState('');
+  const [busy, setBusy]            = useState(false);
   const [pendingModel, setPending] = useState(null);
-  const textareaRef               = useRef(null);
-  const bottomRef                 = useRef(null);
+  const textareaRef                = useRef(null);
+  const bottomRef                  = useRef(null);
 
-  // Scroll on new messages
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [activeChat?.messages?.length, loading]);
 
-  // Auto-resize textarea
   useEffect(() => {
     const ta = textareaRef.current;
     if (!ta) return;
     ta.style.height = 'auto';
-    ta.style.height = Math.min(ta.scrollHeight, 160) + 'px';
+    ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
   }, [input]);
 
-  // Clear pending banner when conversation changes
-  useEffect(() => {
-    setPending(null);
-  }, [activeId]);
+  useEffect(() => { setPending(null); }, [activeId]);
 
-  // Called by ModelSelector when user picks a different model
   const handleModelChange = (newModelId) => {
     const hasMessages = activeChat?.messages?.length > 0;
-
-    if (!hasMessages) {
-      // Empty conversation — just update the model directly, no banner needed
-      setModelId(newModelId);
-      setPending(null);
-      return;
-    }
-
-    // Has messages — check if it's actually a different model
-    const currentModelId = activeChat?.modelId || modelId;
-    if (newModelId === currentModelId) return;
-
-    // Show the confirmation banner
+    if (!hasMessages) { setModelId(newModelId); setPending(null); return; }
+    if (newModelId === (activeChat?.modelId || modelId)) return;
     setPending(newModelId);
   };
 
-  // User confirms: start a brand-new conversation with the new model
   const confirmSwitch = () => {
     if (!pendingModel) return;
-    setModelId(pendingModel);   // update global default
-    newChat('New Chat', pendingModel); // create fresh conversation
+    setModelId(pendingModel);
+    newChat('New Chat', pendingModel);
     setPending(null);
   };
 
-  // User cancels: revert the model selector back to this conversation's model
   const cancelSwitch = () => {
-    const convModel = activeChat?.modelId || modelId;
-    setModelId(convModel);
+    setModelId(activeChat?.modelId || modelId);
     setPending(null);
   };
 
   const doSend = async (override) => {
     const text = (override || input).trim();
     if (!text || busy) return;
-
-    // If there's a pending switch, dismiss it
     setPending(null);
     setInput('');
 
-    // Use the conversation's own model (not global)
     const convModelId = activeChat?.modelId || modelId;
-
     let chatId = activeId;
     if (!chatId) chatId = newChat(text.slice(0, 42), convModelId);
 
@@ -168,7 +143,7 @@ export default function ChatWindow() {
       const msg = err?.response?.data?.error?.message
         || err?.response?.data?.error
         || err.message
-        || 'Could not reach the AI. Make sure your backend is running on port 5000.';
+        || 'Could not reach the AI. Check your backend.';
       addMsg(chatId, {
         id: Date.now() + 'e', role: 'error',
         content: String(msg), ts: new Date().toISOString(), modelId: convModelId,
@@ -184,32 +159,33 @@ export default function ChatWindow() {
   };
 
   const msgs = activeChat?.messages || [];
-
-  // The model currently locked to this conversation (for display)
   const convModel = getModel(activeChat?.modelId || modelId);
-  // The pending model the user wants to switch to
   const wantModel = pendingModel ? getModel(pendingModel) : null;
 
   return (
     <div className="cw-root">
       {/* Header */}
       <div className="cw-header">
+        {/* Hamburger — mobile only */}
+        <button className="cw-menu-btn" onClick={onMenuClick}>
+          <Menu size={18}/>
+        </button>
+
         <div className="cw-header-left">
           <h3 className="cw-chat-title">{activeChat?.title || 'New Chat'}</h3>
         </div>
         <div className="cw-header-mid">
-          {/* Pass onModelChange so the selector calls our handler, not setModelId directly */}
           <ModelSelector onModelChange={handleModelChange}/>
         </div>
         <div className="cw-header-right">
           <div className="cw-provider-badge">
             <span className="cw-pd" style={{background: convModel.color}}/>
-            {convModel.provider}
+            <span className="cw-provider-name">{convModel.provider}</span>
           </div>
         </div>
       </div>
 
-      {/* Switch confirmation banner */}
+      {/* Switch banner */}
       {pendingModel && wantModel && (
         <SwitchBanner
           fromModel={convModel}
@@ -256,7 +232,7 @@ export default function ChatWindow() {
             <Send size={14}/>
           </button>
         </div>
-        <p className="cw-hint">Enter to send · Shift+Enter for new line · Hover AI messages to copy</p>
+        <p className="cw-hint">Enter to send · Shift+Enter for new line</p>
       </div>
     </div>
   );
