@@ -65,7 +65,7 @@ function SwitchBanner({ fromModel, toModel, onStay, onSwitch }) {
 export default function ChatWindow() {
   const {
     activeId, activeChat, modelId,
-    newChat, addMsg, setTitle, setModelId, setActiveId,
+    newChat, addMsg, setTitle, setModelId,
     loading, setLoading,
   } = useChat();
 
@@ -75,7 +75,6 @@ export default function ChatWindow() {
   const [pendingModel, setPending] = useState(null);
   const textareaRef               = useRef(null);
   const bottomRef                 = useRef(null);
-  const model                     = getModel(modelId);
 
   // Scroll on new messages
   useEffect(() => {
