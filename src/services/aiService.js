@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const BASE = process.env.REACT_APP_API_URL || 'https://ai-backend-jet.vercel.app/api';
+
 
 export const AI_MODELS = [
   { id: 'openai/gpt-4o',              name: 'GPT-4o',          provider: 'OpenAI',    endpoint: 'chatgpt', color: '#10a37f', badge: 'GPT' },
