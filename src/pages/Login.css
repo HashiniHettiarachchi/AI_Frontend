@@ -1,0 +1,144 @@
+.login-root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-bg { position: absolute; inset: 0; background: var(--bg-0); }
+
+.lg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: .13;
+  animation: lgDrift 9s ease-in-out infinite;
+}
+.lg-1 { width: 520px; height: 520px; background: #4f80ff; top: -180px; left: -180px; }
+.lg-2 { width: 420px; height: 420px; background: #7c3aed; bottom: -140px; right: -140px; animation-duration: 11s; animation-direction: reverse; }
+.lg-3 { width: 280px; height: 280px; background: #34d399; top: 55%; left: 55%; animation-duration: 13s; }
+
+@keyframes lgDrift {
+  0%,100% { transform: translate(0,0); }
+  40%      { transform: translate(28px,-22px); }
+  70%      { transform: translate(-18px,18px); }
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 400px;
+  background: var(--bg-2);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-xl);
+  padding: 36px 36px 28px;
+  box-shadow: var(--shadow-lg);
+  animation: lgUp .45s ease;
+}
+
+@keyframes lgUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Brand */
+.login-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+.login-logo {
+  width: 48px; height: 48px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-glow);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.login-brand-name { font-size: 1.3rem; letter-spacing: -.4px; color: var(--text-1); }
+.login-brand-sub  { font-size: .75rem; color: var(--text-3); margin-top: 1px; }
+
+/* Tabs */
+.login-tabs {
+  display: flex;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 3px;
+  margin-bottom: 22px;
+  gap: 3px;
+}
+.login-tabs button {
+  flex: 1; padding: 8px; border-radius: 9px;
+  font-size: .82rem; font-weight: 500;
+  color: var(--text-3);
+  transition: background .2s, color .2s;
+}
+.login-tabs button.active { background: var(--bg-3); color: var(--text-1); }
+
+/* Form */
+.login-form { display: flex; flex-direction: column; gap: 14px; }
+.lg-field { display: flex; flex-direction: column; gap: 5px; }
+.lg-field label { font-size: .77rem; color: var(--text-2); font-weight: 500; letter-spacing: .3px; }
+.lg-field input {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 13px;
+  font-size: .88rem;
+  color: var(--text-1);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.lg-field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.lg-field input::placeholder { color: var(--text-3); }
+
+.lg-err {
+  background: rgba(248,113,113,.08);
+  border: 1px solid rgba(248,113,113,.25);
+  color: var(--red);
+  padding: 9px 12px;
+  border-radius: var(--r-sm);
+  font-size: .82rem;
+}
+
+.lg-btn {
+  background: var(--accent);
+  color: #fff;
+  padding: 11px;
+  border-radius: var(--r-sm);
+  font-size: .9rem;
+  font-weight: 600;
+  font-family: 'Syne', sans-serif;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .1s;
+  margin-top: 4px;
+}
+.lg-btn:hover:not(:disabled) { background: var(--accent-h); }
+.lg-btn:active:not(:disabled) { transform: scale(.98); }
+.lg-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+.lg-spin {
+  width: 17px; height: 17px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .65s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.login-divider {
+  display: flex; align-items: center; gap: 10px;
+  margin: 18px 0 14px; color: var(--text-3); font-size: .75rem;
+}
+.login-divider::before,.login-divider::after { content:''; flex:1; height:1px; background: var(--border); }
+
+.lg-guest {
+  width: 100%;
+  padding: 9px;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text-2);
+  font-size: .83rem;
+  transition: color .2s, border-color .2s;
+}
+.lg-guest:hover { color: var(--text-1); border-color: var(--border-light); }

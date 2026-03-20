@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg-0: #080b12;
+  --bg-1: #0e1118;
+  --bg-2: #141820;
+  --bg-3: #1a1f2e;
+  --bg-hover: #1e2438;
+  --border: #222736;
+  --border-light: #2a3045;
+  --text-1: #eaecf4;
+  --text-2: #8891aa;
+  --text-3: #505870;
+  --accent: #4f80ff;
+  --accent-h: #6994ff;
+  --accent-soft: rgba(79,128,255,0.1);
+  --accent-glow: rgba(79,128,255,0.22);
+  --green: #34d399;
+  --red: #f87171;
+  --user-bg: #1b2a5c;
+  --user-border: #2d3f85;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+  --sidebar: 258px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.5);
+  --shadow-lg: 0 8px 48px rgba(0,0,0,0.7);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg-0);
+  color: var(--text-1);
+  font-family: 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,h2,h3,h4,h5,h6 { font-family: 'Syne', sans-serif; }
+
+button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
+input, textarea { font-family: inherit; color: inherit; }
+a { text-decoration: none; color: inherit; }
+
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
